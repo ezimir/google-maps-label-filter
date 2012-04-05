@@ -18,6 +18,12 @@
 			menu li .status { display: none }
 			menu li.enabled:after { content: "(enabled)"; color: #091 }
 
+		#info_panel_edit { font-size: .9em; margin-right: .5em  }
+			#info_panel_edit em { display: inline-block; margin-bottom: .5em; text-align: right; width: 6em }
+			#info_panel_edit input { font-size: 1em; margin-left: 1em }
+			#info_panel_edit button { font-size: 1em; margin: .5em 1em .5em 0; padding: .1em .5em }
+			#info_panel_edit .alert { background: rgba(75, 255, 25, .5); border-radius: .2em; float: right; margin-top: .75em; padding: .1em .5em }
+
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
@@ -25,7 +31,9 @@
 	var map,
 		control_status = {},
 		control_actions = {},
-		control_mapclicks = {};
+		control_mapclicks = {},
+		info_panel_view,
+		info_panel_edit;
 
 	function initializeMap() {
 		var myOptions = {
@@ -67,6 +75,17 @@
 		});
 	}
 
+	function initializePanels() {
+		info_panel_view = new google.maps.InfoWindow({
+			content: $('#info_panel_view')[0],
+			disableAutoPan: true
+		});
+		info_panel_edit = new google.maps.InfoWindow({
+			content: $('#info_panel_edit')[0],
+			disableAutoPan: true
+		});
+	}
+
 	function initializeEvents() {
 		google.maps.event.addListener(map, 'click', function (event) {
 			for (prop in control_mapclicks) {
@@ -74,6 +93,12 @@
 					control_mapclicks[prop](event);
 				}
 			}
+		});
+
+		$('#info_panel_edit button.save').click(saveInfoPanel);
+		$('#info_panel_edit a.delete').click(function (e) {
+			removeInfoPanelAndMarker();
+			return e.preventDefault();
 		});
 	}
 
@@ -97,22 +122,79 @@
 		$('#toggle_' + control).toggleClass('enabled', control_status[control]);
 	}
 
+	var markers = [];
+
 	function addMarker(event) {
 		var marker = new google.maps.Marker({
-			position: event.latLng,
-			title: 'Test marker',
+				position: event.latLng,
+				title: 'Test marker',
 
-			map: map,
-			draggable: true
-		});
+				map: map,
+				draggable: true
+			});
+
+		marker.id = markers.length;
+		markers.push(marker);
+
+		var panel = { id: marker.id, name: marker.title };
+		panels[marker.id] = panel;
+
+		setInfoPanelData(panel);
+		info_panel_edit.open(map, marker);
+
 		google.maps.event.addListener(marker, 'click', function (event) {
-			console.log('toggle marker', event);
+			setInfoPanelData(panels[marker.id]);
+			info_panel_edit.open(map, marker);
 		});
+	}
+
+	function setInfoPanelData(data) {
+		if (typeof data.desc === 'undefined') {
+			data.desc = '';
+		}
+		if (typeof data.tags === 'undefined') {
+			data.tags = '';
+		}
+
+		$('#info_panel_edit').data('id', data.id)
+			.find('.info_name').val(data.name).end()
+			.find('.info_desc').val(data.desc).end()
+			.find('.info_tags').val(data.tags).end();
+	}
+
+	var panels = {};
+
+	function saveInfoPanel() {
+		var $panel = $('#info_panel_edit'),
+			data = {
+				id: $panel.data('id'),
+				name: $panel.find('.info_name').val().trim(),
+				desc: $panel.find('.info_desc').val().trim(),
+				tags: $panel.find('.info_tags').val().trim()
+			};
+
+		panels[data.id] = data;
+
+		$('<div class="alert"> Saved! </div>').insertAfter($('#info_panel_edit .save'));
+		window.setTimeout(function () {
+			$('#info_panel_edit .alert').fadeOut(function () {
+				$(this).remove();
+			});
+		}, 2500);
+	}
+
+	function removeInfoPanelAndMarker() {
+		var $panel = $('#info_panel_edit'),
+			marker_id = $panel.data('id');
+
+		info_panel_edit.close();
+		markers[marker_id].setMap(null);
 	}
 
 	window.onload = function () {
 		initializeMap();
 		initializeControls();
+		initializePanels();
 		initializeEvents();
 	};
 </script>
@@ -138,6 +220,19 @@
 
 			<textarea></textarea>
 		</section>
+	</div>
+
+	<div id="info_panel_edit">
+		<em>Name:</em> <input type="text" class="info_name" /><br />
+		<em>Description:</em> <input type="text" class="info_desc" /><br />
+		<em>Keywords:</em> <input type="text" class="info_tags" /><br />
+
+		<button class="save"> Save </button> <a href class="delete"> Delete </a>
+	</div>
+	<div id="info_panel_view">
+		<strong class="info_name"></strong><br />
+		<span class="info_desc"></span><br />
+		<span class="info_tags"></span>
 	</div>
 </body>
 </html>
