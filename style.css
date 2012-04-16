@@ -1,0 +1,21 @@
+html, body, #map_canvas  {
+	height: 100%;
+}
+
+#controls { background: rgba(255, 255, 255, .8); border-radius: .5em; float: left; position: absolute; top: 4em; right: 4em; width: 25% }
+
+section { display: block; padding: 1em }
+#output textarea { height: 5em; width: 100% }
+
+menu { list-style-type: none }
+	menu li { color: #019; cursor: pointer; padding: .1em .5em }
+	menu li:hover { background-color: #eee; text-decoration: underline }
+	menu li .status { display: none }
+	menu li.enabled:after { content: "(enabled)"; color: #091 }
+
+#info_panel_edit { display: none; font-size: .9em; margin-right: 1em  }
+	#info_panel_edit em { display: inline-block; margin-bottom: .5em; text-align: right; width: 6em }
+	#info_panel_edit input { font-size: 1em; margin-left: 1em }
+	#info_panel_edit button { font-size: 1em; margin: .5em 1em .5em 0; padding: .1em .5em }
+	#info_panel_edit .alert { background: rgba(75, 255, 25, .5); border-radius: .2em; float: right; margin-top: .75em; padding: .1em .5em }
+
