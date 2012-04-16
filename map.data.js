@@ -1,5 +1,5 @@
 
-var map;
+var map,
 	mapOptions = {
 		mapTypeId: google.maps.MapTypeId.HYBRID,
 
