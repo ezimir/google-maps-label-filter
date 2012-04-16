@@ -1,9 +1,17 @@
 
 #controls {
 	background-color: rgba(245, 245, 245, .8);
+	overflow: hidden;
+	padding: 10px;
 	position: absolute;
-	right: 4em;
-	top: 4em;
-	width: 25%;
+	right: 5%;
+	top: 10%;
 }
+
+#controls a {
+	clear: left;
+	float: left;
+	margin-top: .5em;
+}
+
 
