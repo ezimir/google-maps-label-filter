@@ -4,21 +4,21 @@
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<style type="text/css">
 		* { margin: 0; padding: 0 }
-		html, body, #map_canvas, #controls { height: 100% }
+		html, body, #map_canvas  { height: 100% }
 		html { font: 13px Tahoma }
-		#map_canvas { float: left; width: 50% }
-		#controls { margin-left: 50% }
+		#map_canvas { float: left; width: 100% }
+		#controls { background: rgba(255, 255, 255, .8); border-radius: .5em; float: left; position: absolute; top: 4em; right: 4em; width: 25% }
 
 		section { display: block; padding: 1em }
 		#output textarea { height: 5em; width: 100% }
 
-		menu { list-style-type: none; width: 40% }
+		menu { list-style-type: none }
 			menu li { color: #019; cursor: pointer; padding: .1em .5em }
 			menu li:hover { background-color: #eee; text-decoration: underline }
 			menu li .status { display: none }
 			menu li.enabled:after { content: "(enabled)"; color: #091 }
 
-		#info_panel_edit { font-size: .9em; margin-right: 1em  }
+		#info_panel_edit { display: none; font-size: .9em; margin-right: 1em  }
 			#info_panel_edit em { display: inline-block; margin-bottom: .5em; text-align: right; width: 6em }
 			#info_panel_edit input { font-size: 1em; margin-left: 1em }
 			#info_panel_edit button { font-size: 1em; margin: .5em 1em .5em 0; padding: .1em .5em }
@@ -209,10 +209,6 @@
 				<li id="action_outputCurrentMapCoords"> get center coordinates </li>
 				<li id="toggle_addMarker" class="mapevent"> toggle adding markers </li>
 			</menu>
-		</section>
-
-		<section id="usage">
-			<h3> Menu for usage </h3>
 		</section>
 
 		<section id="output">
