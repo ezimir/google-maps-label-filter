@@ -1,25 +1,10 @@
 
-var map,
-	control_status = {},
+var control_status = {},
 	control_actions = {},
 	control_mapclicks = {},
 	info_panel_view,
 	info_panel_edit;
 
-function initializeMap() {
-	var myOptions = {
-		mapTypeId: google.maps.MapTypeId.HYBRID,
-
-		center: new google.maps.LatLng(48.720948232588576, 21.256897872924814),
-		zoom: 15,
-
-		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-		}
-	};
-
-	map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
-}
 
 function initializeControls() {
 	$('menu li[id]').each(function () {
