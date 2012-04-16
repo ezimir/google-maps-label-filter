@@ -143,8 +143,13 @@
 		info_panel_edit.open(map, marker);
 
 		google.maps.event.addListener(marker, 'click', function (event) {
-			setInfoPanelData(panels[marker.id]);
-			info_panel_edit.open(map, marker);
+			var $panel = $('#info_panel_edit');
+			if ($panel.is(':visible') && $panel.data('id') === marker.id) {
+				info_panel_edit.close();
+			} else {
+				setInfoPanelData(panels[marker.id]);
+				info_panel_edit.open(map, marker);
+			}
 		});
 	}
 
@@ -152,14 +157,16 @@
 		if (typeof data.desc === 'undefined') {
 			data.desc = '';
 		}
-		if (typeof data.tags === 'undefined') {
-			data.tags = '';
+		if (typeof data.genre === 'undefined') {
+			data.genre = '';
 		}
 
 		$('#info_panel_edit').data('id', data.id)
 			.find('.info_name').val(data.name).end()
 			.find('.info_desc').val(data.desc).end()
-			.find('.info_tags').val(data.tags).end();
+			.find('.info_genre').val(data.genre).end()
+			.find('.info_time').val(data.time).end()
+			.show();
 	}
 
 	var panels = {};
@@ -170,7 +177,8 @@
 				id: $panel.data('id'),
 				name: $panel.find('.info_name').val().trim(),
 				desc: $panel.find('.info_desc').val().trim(),
-				tags: $panel.find('.info_tags').val().trim()
+				genre: $panel.find('.info_genre').val().trim(),
+				time: $panel.find('.info_time').val().trim()
 			};
 
 		panels[data.id] = data;
@@ -221,14 +229,15 @@
 	<div id="info_panel_edit">
 		<em>Name:</em> <input type="text" class="info_name" /><br />
 		<em>Description:</em> <input type="text" class="info_desc" /><br />
-		<em>Keywords:</em> <input type="text" class="info_tags" /><br />
+		<em>Genre:</em> <input type="text" class="info_genre" /><br />
+		<em>Time:</em> <input type="text" class="info_time" /><br />
 
 		<button class="save"> Save </button> <a href class="delete"> Delete </a>
 	</div>
 	<div id="info_panel_view">
 		<strong class="info_name"></strong><br />
 		<span class="info_desc"></span><br />
-		<span class="info_tags"></span>
+		<span class="info_genre"></span>
 	</div>
 </body>
 </html>
