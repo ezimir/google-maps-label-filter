@@ -1,23 +1,23 @@
 
 #controls {
-	background-color: rgba(245, 245, 245, .8);
-	overflow: hidden;
-	padding: 10px;
-	position: absolute;
-	right: 5%;
-	top: 10%;
+    background-color: rgba(245, 245, 245, .8);
+    overflow: hidden;
+    padding: 10px;
+    position: absolute;
+    right: 5%;
+    top: 10%;
 }
 
 #controls a {
-	display: block;
-	margin-top: .5em;
+    display: block;
+    margin-top: .5em;
 }
 
 #map_output textarea {
-	font-family: monospace;
-	font-size: .85em;
-	height: 15em;
-	line-height: 1em;
-	width: 98%;
-	white-space: pre;
+    font-family: monospace;
+    font-size: .85em;
+    height: 15em;
+    line-height: 1em;
+    width: 98%;
+    white-space: pre;
 }
