@@ -9,9 +9,15 @@
 }
 
 #controls a {
-	clear: left;
-	float: left;
+	display: block;
 	margin-top: .5em;
 }
 
-
+#map_output textarea {
+	font-family: monospace;
+	font-size: .85em;
+	height: 15em;
+	line-height: 1em;
+	width: 98%;
+	white-space: pre;
+}

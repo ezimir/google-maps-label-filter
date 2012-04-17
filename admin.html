@@ -16,8 +16,26 @@
 	<div id="controls" class="well">
 		<h4> Build Map </h4>
 
-		<a id="action_outputCurrentMapCoords" class="btn btn-mini"> get center coordinates </a>
 		<a id="toggle_addMarker" class="mapevent btn btn-mini"> toggle adding markers </a>
+
+		<a class="btn btn-mini" data-action="mapOutput" data-toggle="modal" data-target="#map_output"> Get Map JS </a>
+	</div>
+
+	<div class="modal hide fade" id="map_output">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal"> &times; </a>
+
+			<h3> Map Data JS </h3>
+		</div>
+
+		<div class="modal-body">
+			<p> Save this as "map.data.js". </p>
+			<p> <textarea></textarea> </p>
+		</div>
+
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal"> Close </a>
+		</div>
 	</div>
 
 	<div id="info_panel_edit">
@@ -35,6 +53,7 @@
 	</div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="./sprintf-0.7-beta1.js"></script>
 	<script src="./bootstrap/js/bootstrap.min.js"></script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
@@ -43,8 +62,8 @@
 	<script src="map.data.js"></script>
 	<script>
 		$(function () {
-			initializeMap('map_canvas');
-			//initializeControls();
+			initialize_map('map_canvas');
+			initialize_controls('#controls');
 			//initializePanels();
 			//initializeEvents();
 		});

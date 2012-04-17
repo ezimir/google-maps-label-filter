@@ -6,6 +6,52 @@ var control_status = {},
 	info_panel_edit;
 
 
+function initialize_controls(target_id) {
+	$(target_id)
+		.delegate('[data-action]', 'click', function () {
+			var action = 'action_' + $(this).data('action');
+
+			if (typeof window[action] === 'function') {
+				window[action].call(this);
+			}
+		});
+}
+
+
+var output_template = '\n\
+var map,\n\
+    mapOptions = {\n\
+        mapTypeId: google.maps.MapTypeId.HYBRID,\n\
+\n\
+        center: new google.maps.LatLng(%(latitude)s, %(longitude)s),\n\
+        zoom: %(zoom)d,\n\
+\n\
+        mapTypeControlOptions: {\n\
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU\n\
+        }\n\
+    };\n\
+\n\
+function initialize_map(element_id) {\n\
+    map = new google.maps.Map(document.getElementById(element_id), mapOptions);\n\
+}\
+';
+
+
+function action_mapOutput() {
+	var target_id = $(this).data('target'),
+		center = map.getCenter(),
+		data = {
+			latitude: center.lat(),
+			longitude: center.lng(),
+			zoom: map.getZoom()
+		},
+		output = sprintf(output_template, data);
+
+	$(target_id).find('textarea').val(output);
+}
+
+
+/*
 function initializeControls() {
 	$('menu li[id]').each(function () {
 		if (this.id.indexOf('toggle_') !== -1) {
@@ -19,17 +65,9 @@ function initializeControls() {
 				toggleControl(this.id.substring(7));
 			})
 		}
-
-		if (this.id.indexOf('action_') !== -1) {
-			var action_name = this.id.substring(7);
-			control_actions[action_name] = window[action_name];
-
-			$(this).click(function () {
-				control_actions[this.id.substring(7)]();
-			});
-		}
 	});
 }
+*/
 
 function initializePanels() {
 	info_panel_view = new google.maps.InfoWindow({
