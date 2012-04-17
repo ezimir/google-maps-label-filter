@@ -9,9 +9,7 @@ var map,
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         }
-    };
-
-function initialize_map(element_id) {
-    map = new google.maps.Map(document.getElementById(element_id), mapOptions);
-}
+    },
+    mapMarkers = [
+    ];
 

@@ -1,12 +1,10 @@
 
-var control_status = {},
-    control_actions = {},
-    control_mapclicks = {},
-    info_panel_view,
-    info_panel_edit;
+
+var CLICK_MODE = '',
+    MARKERS = [];
 
 
-// --- General Control UI ----------------------------------------------------
+// --- General Control UI -----------------------------------------------------
 
 
 function initialize_controls(target_id) {
@@ -19,8 +17,33 @@ function initialize_controls(target_id) {
             }
         })
         .delegate('[data-toggle~=button]', 'click', function () {
-            $(this).toggleClass('btn-success', !$(this).hasClass('active'));
+            var active = $(this).hasClass('active');
+            $(this).toggleClass('btn-success', !active);
+
+            CLICK_MODE = ['', $(this).data('action')][~~!active];
         });
+}
+
+
+// --- Initialization ---------------------------------------------------------
+
+
+function initialize_map(element_id) {
+    map = new google.maps.Map(document.getElementById(element_id), mapOptions);
+
+    for (var i = 0; marker = mapMarkers[i]; i++) {
+        marker.map = map;
+        marker.draggable = true;
+        new google.maps.Marker(marker);
+    }
+
+    google.maps.event.addListener(map, 'click', function (event) {
+        var action = 'click_' + CLICK_MODE;
+
+        if (typeof window[action] === 'function') {
+            window[action](event);
+        }
+    });
 }
 
 
@@ -38,17 +61,17 @@ var map,\n\
         mapTypeControlOptions: {\n\
             style: google.maps.MapTypeControlStyle.DROPDOWN_MENU\n\
         }\n\
-    };\n\
-\n\
-';
+    },\n\
+    mapMarkers = [';
 
 var template_marker = '\n\
-';
+        {\n\
+            position: new google.maps.LatLng(%(latitude)s, %(longitude)s),\n\
+            title: \'%(title)s\',\n\
+        }';
 
-var template_init = '\n\
-function initialize_map(element_id) {\n\
-    map = new google.maps.Map(document.getElementById(element_id), mapOptions);\n\
-}\
+var template_output_end = '\n\
+    ];\n\
 ';
 
 
@@ -65,7 +88,20 @@ function action_mapOutput() {
         },
         output = sprintf(template_output, data);
 
-    output += template_init;
+    for (var i = 0; marker = MARKERS[i]; i++) {
+        var position = marker.getPosition();
+        data = {
+            latitude: position.lat(),
+            longitude: position.lng(),
+            title: ''
+        }
+        output += sprintf(template_marker, data);
+        if (i < MARKERS.length - 1) {
+            output += ',';
+        }
+    }
+
+    output += template_output_end;
 
     $(target_id).find('textarea').val(output);
 }
@@ -74,7 +110,16 @@ function action_mapOutput() {
 // --- Marker handling --------------------------------------------------------
 
 
-function action_addMarker() {
+function click_addMarker(event) {
+    var marker = new google.maps.Marker({
+            position: event.latLng,
+            title: 'New Marker',
+
+            map: map,
+            draggable: true
+        });
+
+    MARKERS.push(marker);
 }
 
 
