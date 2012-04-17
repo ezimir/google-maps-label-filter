@@ -6,6 +6,9 @@ var control_status = {},
     info_panel_edit;
 
 
+// --- General Control UI ----------------------------------------------------
+
+
 function initialize_controls(target_id) {
     $(target_id)
         .delegate('[data-action]', 'click', function () {
@@ -14,11 +17,17 @@ function initialize_controls(target_id) {
             if (typeof window[action] === 'function') {
                 window[action].call(this);
             }
+        })
+        .delegate('[data-toggle~=button]', 'click', function () {
+            $(this).toggleClass('btn-success', !$(this).hasClass('active'));
         });
 }
 
 
-var output_template = '\n\
+// --- Templates for JS output ------------------------------------------------
+
+
+var template_output = '\n\
 var map,\n\
     mapOptions = {\n\
         mapTypeId: google.maps.MapTypeId.HYBRID,\n\
@@ -31,10 +40,19 @@ var map,\n\
         }\n\
     };\n\
 \n\
+';
+
+var template_marker = '\n\
+';
+
+var template_init = '\n\
 function initialize_map(element_id) {\n\
     map = new google.maps.Map(document.getElementById(element_id), mapOptions);\n\
 }\
 ';
+
+
+// --- Outputting JS map data -------------------------------------------------
 
 
 function action_mapOutput() {
@@ -45,9 +63,18 @@ function action_mapOutput() {
             longitude: center.lng(),
             zoom: map.getZoom()
         },
-        output = sprintf(output_template, data);
+        output = sprintf(template_output, data);
+
+    output += template_init;
 
     $(target_id).find('textarea').val(output);
+}
+
+
+// --- Marker handling --------------------------------------------------------
+
+
+function action_addMarker() {
 }
 
 
@@ -69,17 +96,6 @@ function initializeControls() {
 }
 */
 
-function initializePanels() {
-    info_panel_view = new google.maps.InfoWindow({
-        content: $('#info_panel_view')[0],
-        disableAutoPan: true
-    });
-    info_panel_edit = new google.maps.InfoWindow({
-        content: $('#info_panel_edit')[0],
-        disableAutoPan: true
-    });
-}
-
 function initializeEvents() {
     google.maps.event.addListener(map, 'click', function (event) {
         for (prop in control_mapclicks) {
@@ -94,13 +110,6 @@ function initializeEvents() {
         removeInfoPanelAndMarker();
         return e.preventDefault();
     });
-}
-
-function outputCurrentMapCoords() {
-    $('#output textarea').val(
-        'center: ' + map.getCenter().toString() + '\n' +
-        'zoom: ' + map.getZoom()
-    );
 }
 
 function toggleControl(control) {
