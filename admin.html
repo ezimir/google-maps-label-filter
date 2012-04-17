@@ -37,20 +37,6 @@
         </div>
     </div>
 
-    <div id="info_panel_edit">
-        <em>Name:</em> <input type="text" class="info_name" /><br />
-        <em>Description:</em> <input type="text" class="info_desc" /><br />
-        <em>Genre:</em> <input type="text" class="info_genre" /><br />
-        <em>Time:</em> <input type="text" class="info_time" /><br />
-
-        <button class="save"> Save </button> <a href class="delete"> Delete </a>
-    </div>
-    <div id="info_panel_view">
-        <strong class="info_name"></strong><br />
-        <span class="info_desc"></span><br />
-        <span class="info_genre"></span>
-    </div>
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -64,8 +50,6 @@
         $(function () {
             initialize_map('map_canvas');
             initialize_controls('#controls');
-            //initializePanels();
-            //initializeEvents();
         });
     </script>
 </body>
