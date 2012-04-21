@@ -1,7 +1,7 @@
 
 
 var CLICK_MODE = '',
-    MARKERS = [];
+    MARKERS = {};
 
 
 // --- General Control UI -----------------------------------------------------
@@ -54,13 +54,8 @@ function initialize_map(element_id) {
     google.maps.event.addListener(map, 'drag', function (event) {
         var $panel = $('#edit:visible')
         if ($panel.length > 0) {
-            var marker_id = $panel.data('id');
-            for (var i = 0; marker = MARKERS[i]; i++) {
-                if (marker.__gm_id === marker_id) {
-                    edit_updatePanelPosition($panel, marker);
-                    break;
-                }
-            }
+            var marker = MARKERS[$panel.data('id')];
+            edit_updatePanelPosition($panel, marker);
         }
     });
 }
@@ -87,7 +82,7 @@ var template_marker = '\n\
         {\n\
             position: new google.maps.LatLng(%(latitude)s, %(longitude)s),\n\
             title: \'%(title)s\',\n\
-        }';
+        },';
 
 var template_output_end = '\n\
     ];\n\
@@ -105,19 +100,22 @@ function action_mapOutput() {
             longitude: center.lng(),
             zoom: map.getZoom()
         },
-        output = sprintf(template_output, data);
+        output = sprintf(template_output, data),
+        count = 0;
 
-    for (var i = 0; marker = MARKERS[i]; i++) {
+    $.each(MARKERS, function (id, marker) {
         var position = marker.getPosition();
         data = {
             latitude: position.lat(),
             longitude: position.lng(),
-            title: ''
+            title: marker.title
         }
         output += sprintf(template_marker, data);
-        if (i < MARKERS.length - 1) {
-            output += ',';
-        }
+
+        count += 1;
+    });
+    if (count) {
+        output = output.slice(0, -1); // remove trailing comma if necessary
     }
 
     output += template_output_end;
@@ -138,7 +136,7 @@ function click_addMarker(event) {
             draggable: true
         });
 
-    MARKERS.push(marker);
+    MARKERS[marker.__gm_id] = marker;
 
     google.maps.event.addListener(marker, 'click', function (event) {
         edit_openPanel(marker);
