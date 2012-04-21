@@ -149,16 +149,31 @@ $.fn.ownHtml = function () {
 }
 
 
+function edit_appendPanel(data, pixel) {
+    return $('#template-edit')
+        .tmpl(data)
+        .data(data)
+        .css({
+            top: pixel.y - 45,
+            left: pixel.x + 10
+        })
+        .appendTo('#map_canvas');
+}
+
+
 function edit_openPanel(marker, pixel) {
-    var $panel = $('#edit');
+    var data = {
+            id: marker.__gm_id,
+            title: marker.title,
+            tags: ''
+        },
+        $panel = $('#edit');
     if ($panel.length === 0) {
-        $panel = $('#template-edit')
-            .tmpl()
-            .css({
-                top: pixel.y - 45,
-                left: pixel.x + 10
-            })
-            .appendTo('#map_canvas')
+        $panel = edit_appendPanel(data, pixel);
+    }
+    if ($panel.data('id') !== marker.__gm_id) {
+        $panel.remove();
+        $panel = edit_appendPanel(data, pixel);
     }
 
     $panel.toggle();
