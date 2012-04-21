@@ -154,8 +154,10 @@ function click_addMarker(event) {
         var $panel = $('#edit');
         if ($panel.length > 0) {
             $panel.fadeTo(100, .4);
-            google.maps.event.addListener(marker, 'dragend', function (event) {
+            google.maps.event.addListener(marker, 'drag', function (event) {
                 edit_updatePanelPosition($panel, marker);
+            });
+            google.maps.event.addListener(marker, 'dragend', function (event) {
                 $panel.fadeTo(100, 1);
             });
         }
