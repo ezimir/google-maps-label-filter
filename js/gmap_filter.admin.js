@@ -51,7 +51,7 @@ function initialize_map(element_id) {
             window[action](event);
         }
     });
-    google.maps.event.addListener(map, 'drag', function (event) {
+    google.maps.event.addListener(map, 'bounds_changed', function (event) {
         var $panel = $('#edit:visible')
         if ($panel.length > 0) {
             var marker = MARKERS[$panel.data('id')];

@@ -29,6 +29,7 @@
 
 #edit {
     position: absolute;
+    z-index: 1000;
 }
     #edit .arrow {
         top: 2em;
