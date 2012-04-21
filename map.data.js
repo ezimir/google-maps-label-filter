@@ -1,5 +1,5 @@
 
-var map,
+var map, overlay,
     mapOptions = {
         mapTypeId: google.maps.MapTypeId.HYBRID,
 

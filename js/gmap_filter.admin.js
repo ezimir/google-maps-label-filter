@@ -34,6 +34,10 @@ function initialize_controls(target_id) {
 function initialize_map(element_id) {
     map = new google.maps.Map(document.getElementById(element_id), mapOptions);
 
+    overlay = new google.maps.OverlayView();
+    overlay.draw = function() {};
+    overlay.setMap(map);
+
     for (var i = 0; marker = mapMarkers[i]; i++) {
         marker.map = map;
         marker.draggable = true;
@@ -47,6 +51,18 @@ function initialize_map(element_id) {
             window[action](event);
         }
     });
+    google.maps.event.addListener(map, 'drag', function (event) {
+        var $panel = $('#edit:visible')
+        if ($panel.length > 0) {
+            var marker_id = $panel.data('id');
+            for (var i = 0; marker = MARKERS[i]; i++) {
+                if (marker.__gm_id === marker_id) {
+                    edit_updatePanelPosition($panel, marker);
+                    break;
+                }
+            }
+        }
+    });
 }
 
 
@@ -54,7 +70,7 @@ function initialize_map(element_id) {
 
 
 var template_output = '\n\
-var map,\n\
+var map, overlay,\n\
     mapOptions = {\n\
         mapTypeId: google.maps.MapTypeId.HYBRID,\n\
 \n\
@@ -125,22 +141,21 @@ function click_addMarker(event) {
     MARKERS.push(marker);
 
     google.maps.event.addListener(marker, 'click', function (event) {
-        edit_openPanel(marker, event.pixel);
+        edit_openPanel(marker);
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
         var $panel = $('#edit');
         if ($panel.length > 0) {
             $panel.fadeTo(100, .4);
             google.maps.event.addListener(marker, 'dragend', function (event) {
-                $panel.css({
-                    top: event.pixel.y - 45,
-                    left: event.pixel.x + 10
-                }).fadeTo(100, 1);
+                edit_updatePanelPosition($panel, marker);
+                $panel.fadeTo(100, 1);
             });
         }
     });
 
-    edit_openPanel(marker, event.pixel);
+    var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition())
+    edit_openPanel(marker);
 }
 
 
@@ -149,31 +164,42 @@ $.fn.ownHtml = function () {
 }
 
 
-function edit_appendPanel(data, pixel) {
-    return $('#template-edit')
-        .tmpl(data)
-        .data(data)
-        .css({
-            top: pixel.y - 45,
-            left: pixel.x + 10
-        })
-        .appendTo('#map_canvas');
+function edit_updatePanelPosition($panel, marker) {
+    var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition());
+    $panel.css({
+        top: pixel.y - 45,
+        left: pixel.x + 10
+    });
 }
 
-
-function edit_openPanel(marker, pixel) {
+function edit_appendPanel(marker, pixel) {
     var data = {
             id: marker.__gm_id,
             title: marker.title,
             tags: ''
         },
-        $panel = $('#edit');
+        $panel = $('#template-edit')
+            .tmpl(data)
+            .data(data);
+
+    edit_updatePanelPosition($panel, marker);
+
+    $panel.appendTo('#map_canvas');
+
+    return $panel;
+}
+
+
+function edit_openPanel(marker, pixel) {
+    var $panel = $('#edit');
+
     if ($panel.length === 0) {
-        $panel = edit_appendPanel(data, pixel);
+        $panel = edit_appendPanel(marker);
     }
+
     if ($panel.data('id') !== marker.__gm_id) {
         $panel.remove();
-        $panel = edit_appendPanel(data, pixel);
+        $panel = edit_appendPanel(marker);
     }
 
     $panel.toggle();
