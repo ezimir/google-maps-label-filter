@@ -127,6 +127,19 @@ function click_addMarker(event) {
     google.maps.event.addListener(marker, 'click', function (event) {
         edit_openPanel(marker, event.pixel);
     });
+    google.maps.event.addListener(marker, 'dragstart', function (event) {
+        if ($('.popover').length > 0) {
+            $('.popover').fadeTo('100', .4);
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                $('#pop').css({
+                    top: event.pixel.y - 15,
+                    left: event.pixel.x + 10
+                }).popover('show');
+
+                $('.popover').fadeTo('100', 1);
+            });
+        }
+    });
 
     edit_openPanel(marker, event.pixel);
 }
@@ -141,7 +154,7 @@ function edit_openPanel(marker, pixel) {
     var $pop = $('#pop');
     if ($pop.length === 0) {
         var $input = $('<input>', { type: 'text', value: 'Title' }).appendTo('body'),
-            $form = $('<label> Tags: <input type="text" /></label>');
+            $form = $('<form class="form-horizontal"><label> Tags: <input type="text" /></label></form>');
 
         $pop = $('<div>', {
                 id: 'pop',
