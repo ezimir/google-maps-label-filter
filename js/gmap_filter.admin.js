@@ -9,6 +9,9 @@ var CLICK_MODE = '',
 
 function initialize_controls(target_id) {
     $(target_id)
+        .find('.btn').tooltip({
+            placement: 'left'
+        }).end()
         .delegate('[data-action]', 'click', function () {
             var action = 'action_' + $(this).data('action');
 
@@ -120,5 +123,14 @@ function click_addMarker(event) {
         });
 
     MARKERS.push(marker);
+
+    google.maps.event.addListener(marker, 'click', function (event) {
+        edit_openPanel(marker, event.pixel);
+    });
+}
+
+
+function edit_openPanel(marker, position) {
+
 }
 
