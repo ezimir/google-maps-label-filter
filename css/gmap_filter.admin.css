@@ -22,3 +22,24 @@
     white-space: pre;
 }
 
+#map_canvas {
+    position; relative;
+}
+
+.popover-inner {
+    padding: 2px;
+}
+    .popover-title, .popover-content {
+        padding: .4em .6em;
+    }
+    .popover-title {
+        font-size: 1.1em;
+    }
+    .popover-content {
+        font-size: .9em;
+    }
+        .popover-title input {
+            margin: 0;
+            width: 96%;
+        }
+

@@ -127,10 +127,41 @@ function click_addMarker(event) {
     google.maps.event.addListener(marker, 'click', function (event) {
         edit_openPanel(marker, event.pixel);
     });
+
+    edit_openPanel(marker, event.pixel);
 }
 
 
-function edit_openPanel(marker, position) {
+$.fn.ownHtml = function () {
+    return $('<div>').append(this.clone()).remove().html();
+}
 
+
+function edit_openPanel(marker, pixel) {
+    var $pop = $('#pop');
+    if ($pop.length === 0) {
+        var $input = $('<input>', { type: 'text', value: 'Title' }).appendTo('body'),
+            $form = $('<label> Tags: <input type="text" /></label>');
+
+        $pop = $('<div>', {
+                id: 'pop',
+                data: {
+                    title: $input.ownHtml(),
+                    content: $form.ownHtml()
+                },
+                css: {
+                    position: 'absolute',
+                    top: pixel.y - 15,
+                    left: pixel.x + 10
+                }
+            })
+            .appendTo('#map_canvas')
+            .popover({
+                html: true,
+                trigger: 'manual'
+            });
+    }
+
+    $pop.popover('toggle');
 }
 
