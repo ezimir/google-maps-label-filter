@@ -52,3 +52,13 @@
                 width: 96%;
             }
 
+    #edit .control-group {
+        margin-bottom: .5em;
+    }
+    #edit .control-label {
+        width: 3em;
+    }
+    #edit .controls {
+        margin-left: 4em;
+    }
+

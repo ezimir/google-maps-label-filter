@@ -136,6 +136,15 @@ function click_addMarker(event) {
             draggable: true
         });
 
+    marker.data = {
+        tags: [],
+        time: 0,
+        age: {
+            from: 10,
+            to: 30
+        }
+    };
+
     MARKERS[marker.__gm_id] = marker;
 
     google.maps.event.addListener(marker, 'click', function (event) {
@@ -171,11 +180,10 @@ function edit_updatePanelPosition($panel, marker) {
 }
 
 function edit_appendPanel(marker, pixel) {
-    var data = {
+    var data = $.extend({}, marker.data, {
             id: marker.__gm_id,
-            title: marker.title,
-            tags: ''
-        },
+            title: marker.title
+        }),
         $panel = $('#template-edit')
             .tmpl(data)
             .data(data);

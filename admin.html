@@ -46,8 +46,19 @@
                 <div class="popover-content">
                     <p>
                         <form class="form-horizontal">
-                            <label> Tags: <input type="text" value="${tags}" /> </label>
-                    </form>
+                            <div class="control-group">
+                                <label class="control-label" for="control-tags"> Tags </label>
+                                <div class="controls"> <input id="control-tags"" type="text" value="${tags}" /> </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="control-time"> Time </label>
+                                <div class="controls"> <input id="control-time"" type="text" value="${time}" /> </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="control-age"> Age </label>
+                                <div class="controls"> <input id="control-age"" type="text" value="${age.from} - ${age.to}" /> </div>
+                            </div>
+                        </form>
                     </p>
                 </div>
             </div>
