@@ -26,20 +26,28 @@
     position; relative;
 }
 
-.popover-inner {
-    padding: 2px;
+
+#edit {
+    position: absolute;
 }
-    .popover-title, .popover-content {
-        padding: .4em .6em;
+    #edit .arrow {
+        top: 2em;
     }
-    .popover-title {
-        font-size: 1.1em;
+
+    #edit .popover-inner {
+        padding: 2px;
     }
-    .popover-content {
-        font-size: .9em;
-    }
-        .popover-title input {
-            margin: 0;
-            width: 96%;
+        #edit .popover-title, #edit .popover-content {
+            padding: .4em .6em;
         }
+        #edit .popover-title {
+            font-size: 1.1em;
+        }
+        #edit .popover-content {
+            font-size: .9em;
+        }
+            #edit .popover-title input {
+                margin: 0;
+                width: 96%;
+            }
 

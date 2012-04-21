@@ -37,9 +37,27 @@
         </div>
     </div>
 
+
+    <script id="template-edit" type="text/x-jquery-tmpl">
+        <div id="edit" class="popover fade right in">
+            <div class="arrow"></div>
+            <div class="popover-inner">
+                <h3 class="popover-title"><input type="text" value="${title}"></h3>
+                <div class="popover-content">
+                    <p>
+                        <form class="form-horizontal">
+                            <label> Tags: <input type="text" value="${tags}" /> </label>
+                    </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
     <script src="./js/sprintf-0.7-beta1.js"></script>
     <script src="./js/bootstrap.min.js"></script>
 

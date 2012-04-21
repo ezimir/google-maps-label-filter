@@ -128,15 +128,14 @@ function click_addMarker(event) {
         edit_openPanel(marker, event.pixel);
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
-        if ($('.popover').length > 0) {
-            $('.popover').fadeTo('100', .4);
+        var $panel = $('#edit');
+        if ($panel.length > 0) {
+            $panel.fadeTo(100, .4);
             google.maps.event.addListener(marker, 'dragend', function (event) {
-                $('#pop').css({
-                    top: event.pixel.y - 15,
+                $panel.css({
+                    top: event.pixel.y - 45,
                     left: event.pixel.x + 10
-                }).popover('show');
-
-                $('.popover').fadeTo('100', 1);
+                }).fadeTo(100, 1);
             });
         }
     });
@@ -151,30 +150,17 @@ $.fn.ownHtml = function () {
 
 
 function edit_openPanel(marker, pixel) {
-    var $pop = $('#pop');
-    if ($pop.length === 0) {
-        var $input = $('<input>', { type: 'text', value: 'Title' }).appendTo('body'),
-            $form = $('<form class="form-horizontal"><label> Tags: <input type="text" /></label></form>');
-
-        $pop = $('<div>', {
-                id: 'pop',
-                data: {
-                    title: $input.ownHtml(),
-                    content: $form.ownHtml()
-                },
-                css: {
-                    position: 'absolute',
-                    top: pixel.y - 15,
-                    left: pixel.x + 10
-                }
+    var $panel = $('#edit');
+    if ($panel.length === 0) {
+        $panel = $('#template-edit')
+            .tmpl()
+            .css({
+                top: pixel.y - 45,
+                left: pixel.x + 10
             })
             .appendTo('#map_canvas')
-            .popover({
-                html: true,
-                trigger: 'manual'
-            });
     }
 
-    $pop.popover('toggle');
+    $panel.toggle();
 }
 
