@@ -48,15 +48,23 @@
                         <form class="form-horizontal">
                             <div class="control-group">
                                 <label class="control-label" for="control-tags"> Tags </label>
-                                <div class="controls"> <input id="control-tags"" type="text" value="${tags}" /> </div>
+                                <div class="controls"> <input id="control-tags" type="text" value="${tags}" placeholder="tag-A, tag-B, tag-C, ..." /> </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="control-time"> Time </label>
-                                <div class="controls"> <input id="control-time"" type="text" value="${time}" /> </div>
+                                <div class="controls">
+                                    <input id="control-time" type="text" value="${time}" class="input-mini" placeholder="30" />
+                                    minutes
+                                </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" for="control-age"> Age </label>
-                                <div class="controls"> <input id="control-age"" type="text" value="${age.from} - ${age.to}" /> </div>
+                                <label class="control-label" for="control-age-from"> Age </label>
+                                <div class="controls">
+                                    <input id="control-age-from" type="text" value="${age.from}" class="input-mini" placeholder="10" />
+                                    -
+                                    <input id="control-age-to" type="text" value="${age.to}" class="input-mini" placeholder="60" />
+                                    years
+                                </div>
                             </div>
                         </form>
                     </p>

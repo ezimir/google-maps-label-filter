@@ -138,10 +138,10 @@ function click_addMarker(event) {
 
     marker.data = {
         tags: [],
-        time: 0,
+        time: null,
         age: {
-            from: 10,
-            to: 30
+            from: null,
+            to: null
         }
     };
 
@@ -184,7 +184,8 @@ function edit_updatePanelPosition($panel, marker) {
 function edit_appendPanel(marker, pixel) {
     var data = $.extend({}, marker.data, {
             id: marker.__gm_id,
-            title: marker.title
+            title: marker.title,
+            tags: marker.data.tags.join(', ')
         }),
         $panel = $('#template-edit')
             .tmpl(data)
