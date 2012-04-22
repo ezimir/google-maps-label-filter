@@ -55,6 +55,10 @@
     #edit .control-group {
         margin-bottom: .5em;
     }
+    #edit form, #edit .control-group:last-child {
+        margin-bottom: 0;
+    }
+
     #edit .control-label {
         width: 3em;
     }
