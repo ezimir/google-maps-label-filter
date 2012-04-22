@@ -162,8 +162,19 @@ function click_addMarker(event) {
             });
         }
     });
+    google.maps.event.addListener(marker, 'mouseover', function (event) {
+        if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
+            var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
+            edit_updatePanelPosition($tooltip, marker);
+            $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
+        }
+    });
+    google.maps.event.addListener(marker, 'mouseout', function (event) {
+        $('.tooltip').fadeOut(100, function () {
+            $(this).remove();
+        });
+    });
 
-    var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition())
     edit_openPanel(marker);
 }
 
