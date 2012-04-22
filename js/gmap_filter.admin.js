@@ -151,7 +151,7 @@ function click_addMarker(event) {
         edit_openPanel(marker);
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
-        var $panel = $('#edit');
+        var $panel = $('#edit:visible');
         if ($panel.length > 0) {
             $panel.fadeTo(100, .4);
             google.maps.event.addListener(marker, 'drag', function (event) {
@@ -202,8 +202,6 @@ function edit_appendPanel(marker, pixel) {
             .tmpl(data)
             .data(data);
 
-    edit_updatePanelPosition($panel, marker);
-
     $panel.appendTo('#map_canvas');
 
     return $panel;
@@ -221,6 +219,8 @@ function edit_openPanel(marker, pixel) {
         $panel.remove();
         $panel = edit_appendPanel(marker);
     }
+
+    edit_updatePanelPosition($panel, marker);
 
     $panel.toggle();
 }
