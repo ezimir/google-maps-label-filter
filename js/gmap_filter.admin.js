@@ -93,6 +93,8 @@ function initialize_map(element_id) {
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
         initialize_markerEvents(marker);
+
+        MARKERS[marker.__gm_id] = marker;
     }
 
     google.maps.event.addListener(map, 'click', function (event) {

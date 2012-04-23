@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+
     <title> GMap Filter </title>
 
     <link rel="stylesheet" href="./css/bootstrap.min.css" />
@@ -32,6 +34,7 @@
         <div class="modal-body">
             <p> Save this as "map.data.js". </p>
             <p> <textarea></textarea> </p>
+            <p> <small> File encoding has to be UTF-8. </small> </p>
         </div>
 
         <div class="modal-footer">
@@ -82,10 +85,11 @@
     <script src="./js/sprintf-0.7-beta1.js"></script>
     <script src="./js/bootstrap.min.js"></script>
 
-    <script src="./js/gmap_filter.admin.js"></script>
+    <script src="./js/gmap_filter.admin.js" charset="utf-8"></script>
 
-    <script src="map.data.js"></script>
+    <script src="map.data.js" charset="utf-8"></script>
     <script>
+        console.log(mapMarkers);
         $(function () {
             initialize_map('map_canvas');
             initialize_controls('#controls');
