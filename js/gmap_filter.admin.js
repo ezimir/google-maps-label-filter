@@ -1,5 +1,37 @@
 
 
+// --- Utility functions ------------------------------------------------------
+
+
+$.fn.ownHtml = function () {
+    return $('<div>').append(this.clone()).remove().html();
+}
+
+
+if (!Array.prototype.map) {
+    Array.prototype.map = function(fun /*, thisp*/) {
+        if (typeof fun !== 'function') {
+            throw new TypeError();
+        }
+
+        var len = this.length,
+            res = new Array(len),
+            thisp = arguments[1];
+
+        for (var i = 0; i < len; i++) {
+            if (i in this) {
+                res[i] = fun.call(thisp, this[i], i, this);
+            }
+        }
+
+        return res;
+    }
+}
+
+
+// --- Global variables -------------------------------------------------------
+
+
 var DEFAULT_CLICK_MODE = 'default',
     CLICK_MODE = DEFAULT_CLICK_MODE,
     MARKERS = {};
@@ -79,6 +111,44 @@ function initialize_map(element_id) {
     });
 }
 
+
+function initialize_markerEvents(marker) {
+    google.maps.event.addListener(marker, 'click', function (event) {
+        if (CLICK_MODE !== DEFAULT_CLICK_MODE) {
+            var action = 'click_marker_' + CLICK_MODE;
+
+            if (typeof window[action] === 'function') {
+                return window[action](marker, event);
+            }
+        }
+
+        edit_openPanel(marker);
+    });
+    google.maps.event.addListener(marker, 'dragstart', function (event) {
+        var $panel = $('#edit:visible');
+        if ($panel.length > 0) {
+            $panel.fadeTo(100, .4);
+            google.maps.event.addListener(marker, 'drag', function (event) {
+                edit_updatePanelPosition($panel, marker);
+            });
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                $panel.fadeTo(100, 1);
+            });
+        }
+    });
+    google.maps.event.addListener(marker, 'mouseover', function (event) {
+        if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
+            var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
+            edit_updatePanelPosition($tooltip, marker);
+            $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
+        }
+    });
+    google.maps.event.addListener(marker, 'mouseout', function (event) {
+        $('.tooltip').fadeOut(100, function () {
+            $(this).remove();
+        });
+    });
+}
 
 // --- Templates for JS output ------------------------------------------------
 
@@ -183,49 +253,6 @@ function click_addMarker(event) {
     control_setDefaultClickMode();
 }
 
-function initialize_markerEvents(marker) {
-    google.maps.event.addListener(marker, 'click', function (event) {
-        if (CLICK_MODE !== DEFAULT_CLICK_MODE) {
-            var action = 'click_marker_' + CLICK_MODE;
-
-            if (typeof window[action] === 'function') {
-                return window[action](marker, event);
-            }
-        }
-
-        edit_openPanel(marker);
-    });
-    google.maps.event.addListener(marker, 'dragstart', function (event) {
-        var $panel = $('#edit:visible');
-        if ($panel.length > 0) {
-            $panel.fadeTo(100, .4);
-            google.maps.event.addListener(marker, 'drag', function (event) {
-                edit_updatePanelPosition($panel, marker);
-            });
-            google.maps.event.addListener(marker, 'dragend', function (event) {
-                $panel.fadeTo(100, 1);
-            });
-        }
-    });
-    google.maps.event.addListener(marker, 'mouseover', function (event) {
-        if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
-            var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
-            edit_updatePanelPosition($tooltip, marker);
-            $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
-        }
-    });
-    google.maps.event.addListener(marker, 'mouseout', function (event) {
-        $('.tooltip').fadeOut(100, function () {
-            $(this).remove();
-        });
-    });
-}
-
-
-$.fn.ownHtml = function () {
-    return $('<div>').append(this.clone()).remove().html();
-}
-
 
 function edit_updatePanelPosition($panel, marker) {
     var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition());
@@ -234,6 +261,7 @@ function edit_updatePanelPosition($panel, marker) {
         left: pixel.x + 10
     });
 }
+
 
 function edit_appendPanel(marker, pixel) {
     var data = $.extend({}, marker.data, {
