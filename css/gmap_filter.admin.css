@@ -8,10 +8,15 @@
     top: 10%;
 }
 
-#controls .btn {
-    display: block;
-    margin-top: .5em;
-}
+    #controls .btn {
+        display: block;
+        margin-top: .5em;
+    }
+
+    #controls .separator {
+        height: 1px;
+        padding: 0;
+    }
 
 #map_output textarea {
     font-family: monospace;
