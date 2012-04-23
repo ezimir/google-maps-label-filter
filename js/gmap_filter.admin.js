@@ -25,7 +25,7 @@ if (!Array.prototype.map) {
         }
 
         return res;
-    }
+    };
 }
 
 
@@ -234,7 +234,19 @@ function click_addMarker(event) {
             draggable: true
         });
 
-    marker.data = {
+    marker.data = edit_getDefaultMarkerData();
+
+    MARKERS[marker.__gm_id] = marker;
+    edit_openPanel(marker);
+
+    initialize_markerEvents(marker);
+
+    control_setDefaultClickMode();
+}
+
+
+function edit_getDefaultMarkerData(marker)  {
+    return {
         tags: [],
         time: null,
         age: {
@@ -242,15 +254,6 @@ function click_addMarker(event) {
             to: null
         }
     };
-
-    MARKERS[marker.__gm_id] = marker;
-
-    initialize_markerEvents(marker);
-
-    var $panel = edit_openPanel(marker);
-    $panel.find('.popover-title input').focus();
-
-    control_setDefaultClickMode();
 }
 
 
@@ -281,6 +284,32 @@ function edit_appendPanel(marker, pixel) {
         }
     });
 
+    $panel.find('input').keyup(function (e) {
+        var $panel = $('#edit'),
+            marker = MARKERS[$panel.data('id')];
+
+        marker.title = $.trim($panel.find('.popover-title input').val());
+        var data = edit_getDefaultMarkerData();
+            tags = $.trim($panel.find('#control-tags').val()),
+            time = $.trim($panel.find('#control-time').val()),
+            age_from = $.trim($panel.find('#control-age-from').val()),
+            age_to = $.trim($panel.find('#control-age-to').val());
+
+        if (tags) {
+            data.tags = tags.split(',').map($.trim);
+        }
+        if (time) {
+            data.time = parseInt(time);
+        }
+        if (age_from) {
+            data.age.from = parseInt(age_from);
+        }
+        if (age_to) {
+            data.age.to = parseInt(age_to);
+        }
+        marker.data = data;
+    });
+
     $panel.appendTo('#map_canvas');
 
     return $panel;
@@ -301,7 +330,10 @@ function edit_openPanel(marker, pixel) {
 
     edit_updatePanelPosition($panel, marker);
 
-    $panel.toggle();
+    $panel
+        .toggle()
+        .find('.popover-title input').focus();
+
     $('.tooltip').toggle();
 
     return $panel;
