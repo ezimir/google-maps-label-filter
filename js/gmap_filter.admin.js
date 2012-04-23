@@ -241,6 +241,7 @@ function edit_openPanel(marker, pixel) {
     edit_updatePanelPosition($panel, marker);
 
     $panel.toggle();
+    $('.tooltip').toggle();
 
     return $panel;
 }
