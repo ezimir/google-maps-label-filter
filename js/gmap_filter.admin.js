@@ -278,13 +278,21 @@ function edit_appendPanel(marker, pixel) {
             .tmpl(data)
             .data(data);
 
-    $panel.find('#control-age-to').keydown(function (e) {
-        var key = e.keyCode || e.which;
-        if (key === 9) {
-            $('#edit .popover-title input').focus();
-            return e.preventDefault();
-        }
-    });
+    $panel
+        .find('.popover-title input').keydown(function (e) {
+            var key = e.keyCode || e.which;
+            if (key === 9 && e.shiftKey) {
+                $('#edit #control-age-to').focus();
+                return e.preventDefault();
+            }
+        }).end()
+        .find('#control-age-to').keydown(function (e) {
+            var key = e.keyCode || e.which;
+            if (key === 9 && !e.shiftKey) {
+                $('#edit .popover-title input').focus();
+                return e.preventDefault();
+            }
+        });
 
     $panel.find('input').keyup(function (e) {
         var $panel = $('#edit'),
