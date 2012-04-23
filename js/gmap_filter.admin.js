@@ -359,3 +359,15 @@ function click_marker_deleteMarker(selected_marker, event) {
     control_setDefaultClickMode();
 }
 
+
+// --- Clear map --------------------------------------------------------------
+
+
+function action_clearMap() {
+    $('#edit').remove();
+    $.each(MARKERS, function (id, marker) {
+        marker.setMap(null);
+    });
+    MARKERS = {};
+}
+

@@ -21,6 +21,8 @@
         <a class="btn" data-action="addMarker" data-toggle="button" title="Add a marker to map."> Add Marker </a>
         <a class="btn" data-action="deleteMarker" data-toggle="button" title="Remove marker from map."> Remove Marker </a>
         <span class="btn disabled separator"></span>
+        <a class="btn" data-action="clearMap" title="Remove all markers."> Clear Map </a>
+        <span class="btn disabled separator"></span>
         <a class="btn" data-action="mapOutput" data-toggle="modal" data-target="#map_output" title="Export JS to be used in user mode."> Get Map JS </a>
     </div>
 
@@ -41,7 +43,6 @@
             <a href="#" class="btn" data-dismiss="modal"> Close </a>
         </div>
     </div>
-
 
     <script id="template-edit" type="text/x-jquery-tmpl">
         <div id="edit" class="popover fade right in">
@@ -89,7 +90,6 @@
 
     <script src="map.data.js" charset="utf-8"></script>
     <script>
-        console.log(mapMarkers);
         $(function () {
             initialize_map('map_canvas');
             initialize_controls('#controls');
