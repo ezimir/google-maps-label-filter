@@ -212,6 +212,14 @@ function edit_appendPanel(marker, pixel) {
             .tmpl(data)
             .data(data);
 
+    $panel.find('#control-age-to').keydown(function (e) {
+        var key = e.keyCode || e.which;
+        if (key === 9) {
+            $('#edit .popover-title input').focus();
+            return e.preventDefault();
+        }
+    });
+
     $panel.appendTo('#map_canvas');
 
     return $panel;
