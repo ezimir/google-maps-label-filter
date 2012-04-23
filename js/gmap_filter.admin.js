@@ -88,6 +88,7 @@ var map, overlay,\n\
         center: new google.maps.LatLng(%(latitude)s, %(longitude)s),\n\
         zoom: %(zoom)d,\n\
 \n\
+        streetViewControl: false,\n\
         mapTypeControlOptions: {\n\
             style: google.maps.MapTypeControlStyle.DROPDOWN_MENU\n\
         }\n\

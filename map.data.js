@@ -6,6 +6,7 @@ var map, overlay,
         center: new google.maps.LatLng(48.720948232588576, 21.25689787292481),
         zoom: 15,
 
+        streetViewControl: false,
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         }
