@@ -26,6 +26,8 @@ function initialize_controls(target_id) {
             var active = $(this).hasClass('active');
             $(this).toggleClass('btn-success', !active);
 
+            $('#edit').remove();
+
             CLICK_MODE = [DEFAULT_CLICK_MODE, $(this).data('action')][~~!active];
         });
 }
@@ -162,6 +164,14 @@ function click_addMarker(event) {
     MARKERS[marker.__gm_id] = marker;
 
     google.maps.event.addListener(marker, 'click', function (event) {
+        if (CLICK_MODE !== DEFAULT_CLICK_MODE) {
+            var action = 'click_marker_' + CLICK_MODE;
+
+            if (typeof window[action] === 'function') {
+                return window[action](marker, event);
+            }
+        }
+
         edit_openPanel(marker);
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
@@ -251,5 +261,23 @@ function edit_openPanel(marker, pixel) {
     $('.tooltip').toggle();
 
     return $panel;
+}
+
+
+function click_marker_deleteMarker(selected_marker, event) {
+    selected_marker.setMap(null);
+    $('.tooltip').remove();
+
+    var markers_new = {},
+        selected_id = selected_marker.__gm_id.toString();
+
+    $.each(MARKERS, function (id, marker) {
+        if (id !== selected_id) {
+            markers_new[id] = marker;
+        }
+    });
+    MARKERS = markers_new;
+
+    control_setDefaultClickMode();
 }
 
