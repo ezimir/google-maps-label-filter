@@ -1,6 +1,7 @@
 
 
-var CLICK_MODE = '',
+var DEFAULT_CLICK_MODE = 'default',
+    CLICK_MODE = DEFAULT_CLICK_MODE,
     MARKERS = {};
 
 
@@ -23,7 +24,7 @@ function initialize_controls(target_id) {
             var active = $(this).hasClass('active');
             $(this).toggleClass('btn-success', !active);
 
-            CLICK_MODE = ['', $(this).data('action')][~~!active];
+            CLICK_MODE = [DEFAULT_CLICK_MODE, $(this).data('action')][~~!active];
         });
 }
 
@@ -58,6 +59,11 @@ function initialize_map(element_id) {
             edit_updatePanelPosition($panel, marker);
         }
     });
+}
+
+
+function click_default(event) {
+    $('#edit:visible').remove();
 }
 
 
@@ -175,7 +181,11 @@ function click_addMarker(event) {
         });
     });
 
-    edit_openPanel(marker);
+    var $panel = edit_openPanel(marker);
+    $panel.find('.popover-title input').focus();
+
+    CLICK_MODE = DEFAULT_CLICK_MODE;
+    $('[data-toggle~=button].active').removeClass('btn-success active');
 }
 
 
@@ -223,5 +233,7 @@ function edit_openPanel(marker, pixel) {
     edit_updatePanelPosition($panel, marker);
 
     $panel.toggle();
+
+    return $panel;
 }
 
