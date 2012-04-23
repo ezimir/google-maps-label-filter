@@ -54,10 +54,13 @@ function initialize_map(element_id) {
     overlay.draw = function() {};
     overlay.setMap(map);
 
-    for (var i = 0; marker = mapMarkers[i]; i++) {
-        marker.map = map;
-        marker.draggable = true;
-        new google.maps.Marker(marker);
+    for (var i = 0; marker_options = mapMarkers[i]; i++) {
+        marker_options.map = map;
+        marker_options.draggable = true;
+
+        var marker = new google.maps.Marker(marker_options);
+        marker.data = marker_options.data;
+        initialize_markerEvents(marker);
     }
 
     google.maps.event.addListener(map, 'click', function (event) {
@@ -99,6 +102,11 @@ var template_marker = '\n\
         {\n\
             position: new google.maps.LatLng(%(latitude)s, %(longitude)s),\n\
             title: \'%(title)s\',\n\
+            data: {\n\
+                tags: [%(tags)s],\n\
+                time: %(time)s,\n\
+                age: { from: %(age.from)s, to: %(age.to)s }\n\
+            }\n\
         },';
 
 var template_output_end = '\n\
@@ -121,13 +129,16 @@ function action_mapOutput() {
         count = 0;
 
     $.each(MARKERS, function (id, marker) {
-        var position = marker.getPosition();
-        data = {
-            latitude: position.lat(),
-            longitude: position.lng(),
-            title: marker.title
-        }
-        output += sprintf(template_marker, data);
+        var position = marker.getPosition(),
+            marker_data = $.extend({}, marker.data, {
+                latitude: position.lat(),
+                longitude: position.lng(),
+                title: marker.title
+            });
+        marker_data.tags = marker.data.tags.map(function (tag) {
+            return '\'' + tag + '\'';
+        }).join(', ');
+        output += sprintf(template_marker, marker_data);
 
         count += 1;
     });
@@ -164,6 +175,15 @@ function click_addMarker(event) {
 
     MARKERS[marker.__gm_id] = marker;
 
+    initialize_markerEvents(marker);
+
+    var $panel = edit_openPanel(marker);
+    $panel.find('.popover-title input').focus();
+
+    control_setDefaultClickMode();
+}
+
+function initialize_markerEvents(marker) {
     google.maps.event.addListener(marker, 'click', function (event) {
         if (CLICK_MODE !== DEFAULT_CLICK_MODE) {
             var action = 'click_marker_' + CLICK_MODE;
@@ -199,11 +219,6 @@ function click_addMarker(event) {
             $(this).remove();
         });
     });
-
-    var $panel = edit_openPanel(marker);
-    $panel.find('.popover-title input').focus();
-
-    control_setDefaultClickMode();
 }
 
 
