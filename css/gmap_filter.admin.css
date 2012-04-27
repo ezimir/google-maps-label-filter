@@ -54,7 +54,23 @@
         }
             #edit .popover-title input {
                 margin: 0;
-                width: 96%;
+                width: 82%;
+            }
+            #edit .popover-title .icon {
+                cursor: pointer;
+                display: block;
+                float: right;
+                height: 32px;
+                opacity: .7;
+                overflow: hidden;
+                width: 32px;
+            }
+                #edit .popover-title .icon:hover {
+                    opacity: 1;
+                }
+            #edit .popover-title .icon img {
+                position: relative;
+                top: -3px;
             }
 
     #edit .control-group {

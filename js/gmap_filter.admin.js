@@ -34,7 +34,10 @@ if (!Array.prototype.map) {
 
 var DEFAULT_CLICK_MODE = 'default',
     CLICK_MODE = DEFAULT_CLICK_MODE,
-    MARKERS = {};
+    MARKERS = {},
+    ICON_PREFIX = 'http://dl.dropbox.com/u/3904604/MapMarkerIcons/',
+    ICON_DEFAULT = 'pin-export.png',
+    ICON_SHADOW = 'shadow.png';
 
 
 // --- General Control UI -----------------------------------------------------
@@ -232,6 +235,19 @@ function click_addMarker(event) {
             position: event.latLng,
             title: 'New Marker',
 
+            icon: new google.maps.MarkerImage(
+                ICON_PREFIX + ICON_DEFAULT,
+                new google.maps.Size(32, 37),   // size
+                new google.maps.Point(0, 0),    // origin
+                new google.maps.Point(16, 37)   // anchor
+            ),
+            shadow: new google.maps.MarkerImage(
+                ICON_PREFIX + ICON_SHADOW,
+                new google.maps.Size(51, 37),   // size
+                new google.maps.Point(0, 0),    // origin
+                new google.maps.Point(28, 37)   // anchor
+            ),
+
             map: map,
             draggable: true
         });
@@ -254,7 +270,8 @@ function edit_getDefaultMarkerData(marker)  {
         age: {
             from: null,
             to: null
-        }
+        },
+        icon: ICON_DEFAULT
     };
 }
 
@@ -272,7 +289,8 @@ function edit_appendPanel(marker, pixel) {
     var data = $.extend({}, marker.data, {
             id: marker.__gm_id,
             title: marker.title,
-            tags: marker.data.tags.join(', ')
+            tags: marker.data.tags.join(', '),
+            icon: marker.data.icon
         }),
         $panel = $('#template-edit')
             .tmpl(data)
