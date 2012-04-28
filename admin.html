@@ -44,13 +44,49 @@
         </div>
     </div>
 
+    <div class="modal hide fade" id="select_icon">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal"> &times; </a>
+
+            <h3> Select Icon </h3>
+        </div>
+
+        <div class="modal-body accordion"></div>
+
+        <script id="template-icon-category" type="text/x-jquery-tmpl">
+            <div class="accordion-group" id="category-${slug}">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" href="#children-${slug}"> ${title} </a>
+                </div>
+                <div id="children-${slug}" data-category="${slug}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <ul class="icons"></ul>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script id="template-icon" type="text/x-jquery-tmpl">
+            <li id="icon-${slug}">
+                <img src="${ICON_PREFIX}${image}" />
+                <strong>${title}</strong>
+                <small>${excerpt}</small>
+            </li>
+        </script>
+
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal"> Keep current </a>
+            <a href="#" class="btn btn-primary disabled" data-dismiss="modal"> Use selected </a>
+        </div>
+    </div>
+
     <script id="template-edit" type="text/x-jquery-tmpl">
         <div id="edit" class="popover fade right in">
             <div class="arrow"></div>
             <div class="popover-inner">
                 <h3 class="popover-title">
                     <input type="text" value="${title}">
-                    <a class="icon" data-toggle="modal"><img src="${ICON_PREFIX}${icon}" /></a>
+                    <a class="icon" data-toggle="modal" href="#select_icon"><img src="${ICON_PREFIX}${icon}" /></a>
                 </h3>
                 <div class="popover-content">
                     <p>
@@ -90,12 +126,14 @@
     <script src="./js/bootstrap.min.js"></script>
 
     <script src="./js/gmap_filter.admin.js" charset="utf-8"></script>
+    <script src="./js/gmap_filter.icons.js" charset="utf-8"></script>
 
     <script src="map.data.js" charset="utf-8"></script>
     <script>
         $(function () {
             initialize_map('map_canvas');
             initialize_controls('#controls');
+            initialize_icons('#select_icon .accordion');
         });
     </script>
 </body>

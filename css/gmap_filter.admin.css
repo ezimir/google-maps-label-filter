@@ -87,3 +87,38 @@
         margin-left: 4em;
     }
 
+#select_icon {
+    margin-left: -450px;
+    width: 900px;
+}
+
+.icons {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+}
+    .icons li {
+        border-radius: 4px;
+        cursor: pointer;
+        float: left;
+        margin: 0 .5% .5em;
+        width: 24%;
+    }
+        .icons li:hover {
+            background: #eee;
+        }
+        .icons li.selected {
+            background: #dfd;
+        }
+    .icons img {
+        float: left;
+        margin-right: .5em;
+    }
+    .icons small {
+        display: block;
+        font-size: .7em;
+        line-height: 1.3em;
+        margin-top: -4px;
+        overflow: hidden;
+    }
+

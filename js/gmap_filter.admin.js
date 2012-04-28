@@ -155,6 +155,46 @@ function initialize_markerEvents(marker) {
     });
 }
 
+
+function icon_appendCategory($target, hierarchy, i) {
+    var $template = $('#template-icon-category');
+
+    for (slug in hierarchy) {
+        if (hierarchy.hasOwnProperty(slug)) {
+            var data = $.extend(icon_categories[slug], { slug: slug }),
+                $category = $template.tmpl(data);
+
+            $category.appendTo($target);
+
+            if (hierarchy[slug]) {
+                icon_appendCategory($category.find('.accordion-inner'), hierarchy[slug], i + 1);
+            }
+        }
+    }
+}
+
+function initialize_icons(target_id) {
+    var $target = $(target_id);
+
+    icon_appendCategory($target, icon_category_hierarchy, 0);
+
+    $target.find('.collapse').on('show', function () {
+        var $this = $(this),
+            $icons = $this.find('> .accordion-inner > .icons');
+
+        if ($icons.find('img').length === 0) {
+            var category = $this.data('category'),
+                $template = $('#template-icon');
+
+            $(icon_categories[category].icons).each(function (i, image) {
+                var data = $.extend(icons[image], { image: image, slug: image.slice(0, -4) });
+                $template.tmpl(data).appendTo($icons);
+            });
+        }
+    });
+}
+
+
 // --- Templates for JS output ------------------------------------------------
 
 
@@ -310,33 +350,32 @@ function edit_appendPanel(marker, pixel) {
                 $('#edit .popover-title input').focus();
                 return e.preventDefault();
             }
-        });
+        }).end()
+        .find('input').keyup(function (e) {
+            var $panel = $('#edit'),
+                marker = MARKERS[$panel.data('id')];
 
-    $panel.find('input').keyup(function (e) {
-        var $panel = $('#edit'),
-            marker = MARKERS[$panel.data('id')];
+            marker.title = $.trim($panel.find('.popover-title input').val());
+            var data = edit_getDefaultMarkerData();
+                tags = $.trim($panel.find('#control-tags').val()),
+                time = $.trim($panel.find('#control-time').val()),
+                age_from = $.trim($panel.find('#control-age-from').val()),
+                age_to = $.trim($panel.find('#control-age-to').val());
 
-        marker.title = $.trim($panel.find('.popover-title input').val());
-        var data = edit_getDefaultMarkerData();
-            tags = $.trim($panel.find('#control-tags').val()),
-            time = $.trim($panel.find('#control-time').val()),
-            age_from = $.trim($panel.find('#control-age-from').val()),
-            age_to = $.trim($panel.find('#control-age-to').val());
-
-        if (tags) {
-            data.tags = tags.split(',').map($.trim);
-        }
-        if (time) {
-            data.time = parseInt(time);
-        }
-        if (age_from) {
-            data.age.from = parseInt(age_from);
-        }
-        if (age_to) {
-            data.age.to = parseInt(age_to);
-        }
-        marker.data = data;
-    });
+            if (tags) {
+                data.tags = tags.split(',').map($.trim);
+            }
+            if (time) {
+                data.time = parseInt(time);
+            }
+            if (age_from) {
+                data.age.from = parseInt(age_from);
+            }
+            if (age_to) {
+                data.age.to = parseInt(age_to);
+            }
+            marker.data = data;
+        }).end()
 
     $panel.appendTo('#map_canvas');
 
