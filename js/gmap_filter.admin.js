@@ -37,7 +37,13 @@ var DEFAULT_CLICK_MODE = 'default',
     MARKERS = {},
     ICON_PREFIX = 'http://dl.dropbox.com/u/3904604/MapMarkerIcons/',
     ICON_DEFAULT = 'pin-export.png',
-    ICON_SHADOW = 'shadow.png';
+    ICON_SHADOW = 'shadow.png',
+    IMAGE_SHADOW = new google.maps.MarkerImage(
+        ICON_PREFIX + ICON_SHADOW,
+        new google.maps.Size(51, 37),   // size
+        new google.maps.Point(0, 0),    // origin
+        new google.maps.Point(28, 37)   // anchor
+    );
 
 
 // --- General Control UI -----------------------------------------------------
@@ -93,6 +99,7 @@ function initialize_map(element_id) {
         marker_options.map = map;
         marker_options.draggable = true;
         marker_options.icon = initialize_icon(marker_options.data.icon);
+        marker_options.shadow = IMAGE_SHADOW;
 
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
@@ -300,12 +307,7 @@ function click_addMarker(event) {
             title: 'New Marker',
 
             icon: initialize_icon(ICON_DEFAULT),
-            shadow: new google.maps.MarkerImage(
-                ICON_PREFIX + ICON_SHADOW,
-                new google.maps.Size(51, 37),   // size
-                new google.maps.Point(0, 0),    // origin
-                new google.maps.Point(28, 37)   // anchor
-            ),
+            shadow: IMAGE_SHADOW,
 
             map: map,
             draggable: true
