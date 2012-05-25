@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+
+    <title> GMap Filter </title>
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/bootstrap-responsive.min.css" />
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/gmap_filter.view.css" />
+</head>
+<body>
+    <div id="controls">
+        <h3> View Map </h3>
+    </div>
+
+    <div id="map_canvas"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script src="./js/sprintf-0.7-beta1.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+    <script src="./js/gmap_filter.view.js" charset="utf-8"></script>
+
+    <script src="map.data.js" charset="utf-8"></script>
+    <script>
+        $(function () {
+            initialize_map('map_canvas');
+        });
+    </script>
+</body>
+</html>
+

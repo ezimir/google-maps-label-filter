@@ -1,0 +1,15 @@
+
+#map_canvas {
+    margin-right: 200px;
+}
+
+#controls {
+    float: right;
+    height: 100%;
+    width: 200px;
+}
+
+#controls h3 {
+    margin: 19px;
+}
+
