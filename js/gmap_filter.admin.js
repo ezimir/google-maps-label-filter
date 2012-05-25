@@ -92,12 +92,7 @@ function initialize_map(element_id) {
     for (var i = 0; marker_options = mapMarkers[i]; i++) {
         marker_options.map = map;
         marker_options.draggable = true;
-        marker_options.icon = new google.maps.MarkerImage(
-            ICON_PREFIX + marker_options.data.icon,
-            new google.maps.Size(32, 37),   // size
-            new google.maps.Point(0, 0),    // origin
-            new google.maps.Point(16, 37)   // anchor
-        );
+        marker_options.icon = initialize_icon(marker_options.data.icon);
 
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
@@ -120,6 +115,16 @@ function initialize_map(element_id) {
             edit_updatePanelPosition($panel, marker);
         }
     });
+}
+
+
+function initialize_icon(image) {
+    return new google.maps.MarkerImage(
+        ICON_PREFIX + image,
+        new google.maps.Size(32, 37),   // size
+        new google.maps.Point(0, 0),    // origin
+        new google.maps.Point(16, 37)   // anchor
+    )
 }
 
 
@@ -294,12 +299,7 @@ function click_addMarker(event) {
             position: event.latLng,
             title: 'New Marker',
 
-            icon: new google.maps.MarkerImage(
-                ICON_PREFIX + ICON_DEFAULT,
-                new google.maps.Size(32, 37),   // size
-                new google.maps.Point(0, 0),    // origin
-                new google.maps.Point(16, 37)   // anchor
-            ),
+            icon: initialize_icon(ICON_DEFAULT),
             shadow: new google.maps.MarkerImage(
                 ICON_PREFIX + ICON_SHADOW,
                 new google.maps.Size(51, 37),   // size
@@ -426,20 +426,15 @@ function edit_openPanel(marker, pixel) {
 }
 
 
-function edit_updateMarkerIcon(icon) {
+function edit_updateMarkerIcon(image) {
     var $panel = $('#edit'),
         marker = MARKERS[$panel.data('id')];
 
-    $panel.data('icon', icon);
+    $panel.data('icon', image);
     $panel.find('.popover-title .icon').replaceWith($('#template-edit-icon').tmpl($panel.data()));
 
-    marker.data.icon = icon;
-    marker.setIcon(new google.maps.MarkerImage(
-        ICON_PREFIX + icon,
-        new google.maps.Size(32, 37),   // size
-        new google.maps.Point(0, 0),    // origin
-        new google.maps.Point(16, 37)   // anchor
-    ));
+    marker.data.icon = image;
+    marker.setIcon(initialize_icon(image));
 }
 
 
