@@ -264,7 +264,7 @@ var icon_categories = {
         },
         'interior': {
             title: 'Interior',
-            icons: ['moving-walkway-enter-export.png', 'entrance.png', 'exit.png', 'firstaid.png', 'wifi.png', 'waiting.png', 'trash.png', 'toilets.png', 'telephone.png', 'smoking.png', 'shower.png', 'information.png', 'fireexstinguisher.png', 'elevator_up.png', 'elevator_down.png', 'elevator.png', 'drinkingfountain.png', 'disability.png']
+            icons: ['stairs.png', 'moving-walkway-enter-export.png', 'entrance.png', 'exit.png', 'firstaid.png', 'wifi.png', 'waiting.png', 'trash.png', 'toilets.png', 'telephone.png', 'smoking.png', 'shower.png', 'information.png', 'fireexstinguisher.png', 'elevator_up.png', 'elevator_down.png', 'elevator.png', 'drinkingfountain.png', 'disability.png']
         },
         'real-estate': {
             title: 'Real Estate',
@@ -272,7 +272,7 @@ var icon_categories = {
         },
         'industry': {
             title: 'Industry',
-            icons: ['gas_cylinder1.png', 'warehouse-2.png', 'foundry-2.png', 'metronetwork.png', 'database.png', 'chemistry-2.png', 'surveying-2.png', 'sawmill-2.png', 'brewery1.png', 'shipwreck.png', 'lighthouse-2.png', 'fishing.png', 'deepseafishing.png', 'recycle.png', 'construction.png', 'landfill.png', 'museum_industry.png', 'mine.png', 'watertower.png', 'oilpumpjack.png', 'observatory.png', 'mobilephonetower.png', 'fishingboat.png', 'factory.png', 'expert.png', 'spaceport-2.png', 'laboratory.png']
+            icons: ['iobridge.png', 'gas_cylinder1.png', 'warehouse-2.png', 'foundry-2.png', 'metronetwork.png', 'database.png', 'chemistry-2.png', 'surveying-2.png', 'sawmill-2.png', 'brewery1.png', 'shipwreck.png', 'lighthouse-2.png', 'fishing.png', 'deepseafishing.png', 'recycle.png', 'construction.png', 'landfill.png', 'museum_industry.png', 'mine.png', 'watertower.png', 'oilpumpjack.png', 'observatory.png', 'mobilephonetower.png', 'fishingboat.png', 'factory.png', 'expert.png', 'spaceport-2.png', 'laboratory.png']
         },
         'electric-power': {
             title: 'Electric power',
@@ -313,6 +313,14 @@ var icon_categories = {
     };
 
 var icons = {
+        'iobridge.png': {
+            title: 'ioBridge',
+            excerpt: 'internet, gateway',
+        },
+        'stairs.png': {
+            title: 'Stairs',
+            excerpt: 'upstairs, story',
+        },
         'bike_downhill.png': {
             title: 'Bike downhill',
             excerpt: 'cycling, race'
