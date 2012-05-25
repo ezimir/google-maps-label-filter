@@ -67,7 +67,7 @@
         </script>
 
         <script id="template-icon" type="text/x-jquery-tmpl">
-            <li id="icon-${slug}">
+            <li id="icon-${slug}" data-image="${image}" class="icon">
                 <img src="${ICON_PREFIX}${image}" />
                 <strong>${title}</strong>
                 <small>${excerpt}</small>
@@ -76,7 +76,7 @@
 
         <div class="modal-footer">
             <a href="#" class="btn" data-dismiss="modal"> Keep current </a>
-            <a href="#" class="btn btn-primary disabled" data-dismiss="modal"> Use selected </a>
+            <a href="#" class="btn btn-primary" data-dismiss="modal"> Use selected </a>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
             <div class="popover-inner">
                 <h3 class="popover-title">
                     <input type="text" value="${title}">
-                    <a class="icon" data-toggle="modal" href="#select_icon"><img src="${ICON_PREFIX}${icon}" /></a>
+                    {{tmpl($data) "#template-edit-icon"}}
                 </h3>
                 <div class="popover-content">
                     <p>
@@ -118,6 +118,10 @@
         </div>
     </script>
 
+    <script id="template-edit-icon" type="text/x-jquery-tmpl">
+        <a class="icon" data-toggle="modal" href="#select_icon"><img src="${ICON_PREFIX}${icon}" /></a>
+    </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFhCs4Q_45eYq3YqUrhnqifCODC13dG1k&sensor=false&language=sk&region=SK"> </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -133,7 +137,7 @@
         $(function () {
             initialize_map('map_canvas');
             initialize_controls('#controls');
-            initialize_icons('#select_icon .accordion');
+            initialize_icons('#select_icon');
         });
     </script>
 </body>

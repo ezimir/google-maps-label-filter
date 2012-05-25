@@ -174,24 +174,36 @@ function icon_appendCategory($target, hierarchy, i) {
 }
 
 function initialize_icons(target_id) {
-    var $target = $(target_id);
+    var $target = $(target_id),
+        $collapsible = $target.find('.accordion');
 
-    icon_appendCategory($target, icon_category_hierarchy, 0);
+    icon_appendCategory($collapsible, icon_category_hierarchy, 0);
 
-    $target.find('.collapse').on('show', function () {
-        var $this = $(this),
-            $icons = $this.find('> .accordion-inner > .icons');
+    $collapsible
+        .find('.collapse').on('show', function () {
+            var $this = $(this),
+                $icons = $this.find('> .accordion-inner > .icons');
 
-        if ($icons.find('img').length === 0) {
-            var category = $this.data('category'),
-                $template = $('#template-icon');
+            if ($icons.find('img').length === 0) {
+                var category = $this.data('category'),
+                    $template = $('#template-icon');
 
-            $(icon_categories[category].icons).each(function (i, image) {
-                var data = $.extend(icons[image], { image: image, slug: image.slice(0, -4) });
-                $template.tmpl(data).appendTo($icons);
-            });
-        }
-    });
+                $(icon_categories[category].icons).each(function (i, image) {
+                    var data = $.extend(icons[image], { image: image, slug: image.slice(0, -4) });
+                    $template.tmpl(data).appendTo($icons);
+                });
+            }
+        }).end()
+        .delegate('.icon', 'click', function () {
+            $target.find('.icon.selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+    $target
+        .delegate('.btn-primary', 'click', function () {
+            var image_name = $target.find('.icon.selected').data('image');
+            edit_updateMarkerIcon(image_name);
+        });
 }
 
 
@@ -404,6 +416,23 @@ function edit_openPanel(marker, pixel) {
     $('.tooltip').toggle();
 
     return $panel;
+}
+
+
+function edit_updateMarkerIcon(icon) {
+    var $panel = $('#edit'),
+        marker = MARKERS[$panel.data('id')];
+
+    $panel.data('icon', icon);
+    $panel.find('.popover-title .icon').replaceWith($('#template-edit-icon').tmpl($panel.data()));
+
+    marker.data.icon = icon;
+    marker.setIcon(new google.maps.MarkerImage(
+        ICON_PREFIX + icon,
+        new google.maps.Size(32, 37),   // size
+        new google.maps.Point(0, 0),    // origin
+        new google.maps.Point(16, 37)   // anchor
+    ));
 }
 
 
