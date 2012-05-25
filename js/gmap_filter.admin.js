@@ -92,6 +92,12 @@ function initialize_map(element_id) {
     for (var i = 0; marker_options = mapMarkers[i]; i++) {
         marker_options.map = map;
         marker_options.draggable = true;
+        marker_options.icon = new google.maps.MarkerImage(
+            ICON_PREFIX + marker_options.data.icon,
+            new google.maps.Size(32, 37),   // size
+            new google.maps.Point(0, 0),    // origin
+            new google.maps.Point(16, 37)   // anchor
+        );
 
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
@@ -232,7 +238,8 @@ var template_marker = '\n\
             data: {\n\
                 tags: [%(tags)s],\n\
                 time: %(time)s,\n\
-                age: { from: %(age.from)s, to: %(age.to)s }\n\
+                age: { from: %(age.from)s, to: %(age.to)s },\n\
+                icon: \'%(icon)s\'\n\
             }\n\
         },';
 
