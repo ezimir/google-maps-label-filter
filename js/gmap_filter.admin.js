@@ -272,10 +272,10 @@ function action_mapOutput() {
             marker_data = $.extend({}, marker.data, {
                 latitude: position.lat(),
                 longitude: position.lng(),
-                title: marker.title
+                title: marker.title.replace('\'', '\\\'')
             });
         marker_data.tags = marker.data.tags.map(function (tag) {
-            return '\'' + tag + '\'';
+            return '\'' + tag.replace('\'', '\\\'') + '\'';
         }).join(', ');
         output += sprintf(template_marker, marker_data);
 
