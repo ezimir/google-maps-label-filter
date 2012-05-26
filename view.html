@@ -16,15 +16,19 @@
     <div id="controls">
         <h3> View Map </h3>
 
-        <label>
-            Tags <input type="text" />
-        </label>
-        <label>
-            Time <input type="number" value="45" />
-        </label>
-        <label>
-            Age <input type="number" value="25" />
-        </label>
+        <form>
+            <label>
+                Tags <input name="tags" type="text" />
+            </label>
+            <label>
+                Time <input name="time" type="number" value="45" />
+            </label>
+            <label>
+                Age <input name="age" type="number" value="25" />
+            </label>
+
+            <button class="btn"> Filter </button>
+        </form>
     </div>
 
     <div id="map_canvas"></div>
@@ -42,6 +46,7 @@
     <script>
         $(function () {
             initialize_map('map_canvas');
+            initialize_controls('#controls');
         });
     </script>
 </body>
