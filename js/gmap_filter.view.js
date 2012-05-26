@@ -1,4 +1,5 @@
 
+
 var MARKERS = {},
     ICON_PREFIX = 'http://dl.dropbox.com/u/3904604/MapMarkerIcons/',
     ICON_SHADOW = 'shadow.png',
@@ -8,6 +9,7 @@ var MARKERS = {},
         new google.maps.Point(0, 0),    // origin
         new google.maps.Point(28, 37)   // anchor
     );
+
 
 // --- Initialization ---------------------------------------------------------
 
@@ -27,24 +29,10 @@ function initialize_map(element_id) {
 
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
+        initialize_markerEvents(marker);
 
         MARKERS[marker.__gm_id] = marker;
     }
-
-    google.maps.event.addListener(map, 'click', function (event) {
-        var action = 'click_' + CLICK_MODE;
-
-        if (typeof window[action] === 'function') {
-            window[action](event);
-        }
-    });
-    google.maps.event.addListener(map, 'bounds_changed', function (event) {
-        var $panel = $('#edit:visible')
-        if ($panel.length > 0) {
-            var marker = MARKERS[$panel.data('id')];
-            edit_updatePanelPosition($panel, marker);
-        }
-    });
 }
 
 
@@ -55,5 +43,30 @@ function initialize_icon(image) {
         new google.maps.Point(0, 0),    // origin
         new google.maps.Point(16, 37)   // anchor
     )
+}
+
+
+function initialize_markerEvents(marker) {
+    google.maps.event.addListener(marker, 'mouseover', function (event) {
+        if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
+            var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
+            edit_updatePanelPosition($tooltip, marker);
+            $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
+        }
+    });
+    google.maps.event.addListener(marker, 'mouseout', function (event) {
+        $('.tooltip').fadeOut(100, function () {
+            $(this).remove();
+        });
+    });
+}
+
+
+function edit_updatePanelPosition($panel, marker) {
+    var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition());
+    $panel.css({
+        top: pixel.y - 40,
+        left: pixel.x + 10
+    });
 }
 

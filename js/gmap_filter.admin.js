@@ -340,7 +340,7 @@ function edit_getDefaultMarkerData(marker)  {
 function edit_updatePanelPosition($panel, marker) {
     var pixel = overlay.getProjection().fromLatLngToContainerPixel(marker.getPosition());
     $panel.css({
-        top: pixel.y - 45,
+        top: pixel.y - 40,
         left: pixel.x + 10
     });
 }
