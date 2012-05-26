@@ -13,3 +13,10 @@
     margin: 19px;
 }
 
+#controls label {
+    padding: 0 .5em;
+}
+#controls input {
+    width: 90%;
+}
+
