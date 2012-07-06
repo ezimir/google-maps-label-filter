@@ -283,7 +283,9 @@ function action_mapOutput() {
             });
         marker_data.tags = marker.data.tags.map(function (tag) {
             return '\'' + tag.replace('\'', '\\\'') + '\'';
-        }).join(', ');
+        });
+        marker_data.tags.sort();
+        marker_data.tags = marker_data.tags.join(', ');
         output += sprintf(template_marker, marker_data);
 
         count += 1;

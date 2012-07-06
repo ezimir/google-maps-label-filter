@@ -25,6 +25,10 @@ function initialize_controls(target_id) {
 
         if (tagsraw.length) {
             taglist = tagsraw.split(',');
+            taglist = taglist.map(function (item) {
+                return $.trim(item);
+            });
+            taglist.sort();
         }
 
         filter_updateMarkers({
@@ -76,10 +80,12 @@ function initialize_icon(image) {
 
 function initialize_markerEvents(marker) {
     google.maps.event.addListener(marker, 'mouseover', function (event) {
-        if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
-            var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
-            edit_updatePanelPosition($tooltip, marker);
-            $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
+        if (marker.data.enabled) {
+            if (!$('#edit').is(':visible') || $('#edit').data('id') !== marker.__gm_id) {
+                var $tooltip = $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + marker.title + '</div></div>');
+                edit_updatePanelPosition($tooltip, marker);
+                $tooltip.hide().appendTo('#map_canvas').fadeIn(100);
+            }
         }
     });
     google.maps.event.addListener(marker, 'mouseout', function (event) {
@@ -103,35 +109,93 @@ function edit_updatePanelPosition($panel, marker) {
 
 
 function filter_updateMarkers(filter_options) {
-    console.log(filter_options);
     $.each(MARKERS, function (id, marker) {
-        var age_from_ok = true,
-            age_to_ok = true;
+        var enable = true;
 
-        if (marker.data.age_from && marker.data.age_from >= filter_options.age) {
-            age_from_ok = false;
-        }
-        if (marker.data.age_to && marker.data.age_to <= filter_options.age) {
-            age_to_ok = false;
-        }
-        if (age_from_ok && age_to_ok) {
-            return filter_enableMarker(marker);
+        if (marker.data.tags.length && filter_options.tags.length) {
+            var found_tags = getIntersect(marker.data.tags, filter_options.tags);
+            console.log(found_tags, filter_options.tags);
+            if (found_tags.join('') !== filter_options.tags.join('')) {
+                enable = false;
+            }
         }
 
-        if (marker.data.time - 5 <= filter_options.time && marker.data.time + 5 >= filter_options.time) {
-            return filter_enableMarker(marker);
+        if (marker.data.age.from && marker.data.age.from > filter_options.age) {
+            enable = false;
         }
-        filter_disableMarker(marker);
+        if (marker.data.age.to && marker.data.age.to < filter_options.age) {
+            enable = false;
+        }
+
+        if (marker.data.time + 5 > filter_options.time && marker.data.time - 5 < filter_options.time) {
+            enable = false;
+        }
+
+        filter_toggleMarker(marker, enable);
     });
 }
 
 
-function filter_enableMarker(marker) {
-    marker.setVisible(true);
+function filter_toggleMarker(marker, enable) {
+    marker.data.enabled = enable;
+    var $images = $(map.getDiv()).find('div img[src="' + marker.icon.url + '"]'),
+    $images.parent().css({ 'opacity': enable ? 1 : .4 });
 }
 
 
-function filter_disableMarker(marker) {
-    marker.setVisible(false);
+// --- Utility functions ------------------------------------------------------
+
+
+function getIntersect(arr1, arr2) {
+    var r = [], o = {}, l = arr2.length, i, v;
+    for (i = 0; i < l; i++) {
+        o[arr2[i]] = true;
+    }
+    l = arr1.length;
+    for (i = 0; i < l; i++) {
+        v = arr1[i];
+        if (v in o) {
+            r.push(v);
+        }
+    }
+    return r;
+}
+
+
+if (!Array.prototype.map) {
+    Array.prototype.map = function(callback, thisArg) {
+        var T, A, k;
+
+        if (this == null) {
+            throw new TypeError(" this is null or not defined");
+        }
+
+        var O = Object(this),
+            len = O.length >>> 0;
+
+        if ({}.toString.call(callback) != "[object Function]") {
+            throw new TypeError(callback + " is not a function");
+        }
+
+        if (thisArg) {
+            T = thisArg;
+        }
+
+        A = new Array(len);
+
+        k = 0;
+
+        while(k < len) {
+            var kValue, mappedValue;
+            if (k in O) {
+                kValue = O[ k ];
+                mappedValue = callback.call(T, kValue, k, O);
+                A[ k ] = mappedValue;
+            }
+            k++;
+        }
+
+        return A;
+    };
 }
 
