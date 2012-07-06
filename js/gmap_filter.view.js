@@ -62,6 +62,7 @@ function initialize_map(element_id) {
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
         marker.data.index = i;
+        marker.data.enabled = true;
         initialize_markerEvents(marker);
 
         MARKERS[marker.__gm_id] = marker;
