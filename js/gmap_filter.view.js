@@ -195,14 +195,14 @@ if (!Array.prototype.map) {
         var T, A, k;
 
         if (this == null) {
-            throw new TypeError(" this is null or not defined");
+            throw new TypeError(' this is null or not defined');
         }
 
         var O = Object(this),
             len = O.length >>> 0;
 
-        if ({}.toString.call(callback) != "[object Function]") {
-            throw new TypeError(callback + " is not a function");
+        if ({}.toString.call(callback) != '[object Function]') {
+            throw new TypeError(callback + ' is not a function');
         }
 
         if (thisArg) {
@@ -226,6 +226,7 @@ if (!Array.prototype.map) {
         return A;
     };
 }
+
 
 $.expr[':'].icons = function (elem) {
     return $(elem).attr('src').indexOf(ICON_PREFIX) === 0;
