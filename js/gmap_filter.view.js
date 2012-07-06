@@ -61,6 +61,7 @@ function initialize_map(element_id) {
 
         var marker = new google.maps.Marker(marker_options);
         marker.data = marker_options.data;
+        marker.data.index = i;
         initialize_markerEvents(marker);
 
         MARKERS[marker.__gm_id] = marker;
@@ -94,6 +95,24 @@ function initialize_markerEvents(marker) {
         });
     });
 }
+
+
+var checkIcons = window.setInterval(function () {
+    if (map) {
+        var $icons = $(map.getDiv()).find('img:icons');
+        if ($icons.length) {
+            window.clearInterval(checkIcons);
+
+            var $divs = $icons.parent(),
+                marker_count = mapMarkers.length;
+            $.each(MARKERS, function (id, marker) {
+                marker.data.$elem = $divs.filter(function (index) {
+                    return index === marker.data.index || index === marker.data.index + marker_count || index === marker.data.index + 2 * marker_count;
+                });
+            });
+        }
+    }
+}, 500);
 
 
 // --- Marker handling --------------------------------------------------------
@@ -137,8 +156,7 @@ function filter_updateMarkers(filter_options) {
 
 function filter_toggleMarker(marker, enable) {
     marker.data.enabled = enable;
-    var $images = $(map.getDiv()).find('div img[src="' + marker.icon.url + '"]');
-    $images.parent().css({ 'opacity': enable ? 1 : .4 });
+    marker.data.$elem.css({ 'opacity': enable ? 1 : .2 });
 }
 
 
@@ -196,5 +214,9 @@ if (!Array.prototype.map) {
 
         return A;
     };
+}
+
+$.expr[':'].icons = function (elem) {
+    return $(elem).attr('src').indexOf(ICON_PREFIX) === 0;
 }
 
