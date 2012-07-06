@@ -33,7 +33,10 @@ function initialize_controls(target_id) {
 
         filter_updateMarkers({
             tags: taglist,
-            time: parseInt($.trim($this.find('input[name=time]').val()), 10),
+            time: {
+                from: parseInt($.trim($this.find('input[name=time-from]').val()), 10),
+                to: parseInt($.trim($this.find('input[name=time-to]').val()), 10),
+            },
             age: parseInt($.trim($this.find('input[name=age]').val()), 10)
         });
 
@@ -132,22 +135,29 @@ function filter_updateMarkers(filter_options) {
     $.each(MARKERS, function (id, marker) {
         var enable = true;
 
-        if (marker.data.tags.length && filter_options.tags.length) {
+        if (filter_options.tags.length && marker.data.tags.length) {
             var found_tags = getIntersect(marker.data.tags, filter_options.tags);
             if (found_tags.join('') !== filter_options.tags.join('')) {
                 enable = false;
             }
         }
 
-        if (marker.data.age.from && marker.data.age.from > filter_options.age) {
-            enable = false;
-        }
-        if (marker.data.age.to && marker.data.age.to < filter_options.age) {
-            enable = false;
+        if (marker.data.time) {
+            if (filter_options.time.from && marker.data.time < filter_options.time.from) {
+                enable = false;
+            }
+            if (filter_options.time.to && marker.data.time > filter_options.time.to) {
+                enable = false;
+            }
         }
 
-        if (marker.data.time + 5 > filter_options.time && marker.data.time - 5 < filter_options.time) {
-            enable = false;
+        if (filter_options.age) {
+            if (marker.data.age.from && marker.data.age.from > filter_options.age) {
+                enable = false;
+            }
+            if (marker.data.age.to && marker.data.age.to < filter_options.age) {
+                enable = false;
+            }
         }
 
         filter_toggleMarker(marker, enable);

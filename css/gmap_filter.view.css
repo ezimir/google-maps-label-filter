@@ -16,7 +16,14 @@
 #controls form {
     padding: 0 .5em;
 }
+#controls em {
+    display: block;
+}
 #controls input {
     width: 90%;
+}
+#controls input.input-mini {
+    display: inline;
+    width: 39%;
 }
 
