@@ -114,7 +114,6 @@ function filter_updateMarkers(filter_options) {
 
         if (marker.data.tags.length && filter_options.tags.length) {
             var found_tags = getIntersect(marker.data.tags, filter_options.tags);
-            console.log(found_tags, filter_options.tags);
             if (found_tags.join('') !== filter_options.tags.join('')) {
                 enable = false;
             }
@@ -138,7 +137,7 @@ function filter_updateMarkers(filter_options) {
 
 function filter_toggleMarker(marker, enable) {
     marker.data.enabled = enable;
-    var $images = $(map.getDiv()).find('div img[src="' + marker.icon.url + '"]'),
+    var $images = $(map.getDiv()).find('div img[src="' + marker.icon.url + '"]');
     $images.parent().css({ 'opacity': enable ? 1 : .4 });
 }
 
