@@ -5,4 +5,4 @@ Once ready this will allow you to:
 - edit "keywords" assigned to markers
 - filter/highlight created markers using keywords
 
-[Demo](http://ezimir.github.com/GMap-label-filter)
+[Demo](http://ezimir.github.com/google-maps-label-filter)
